@@ -9,12 +9,13 @@
  */
 
  import React, { useEffect, useState} from 'react';
- import {ActivityIndicator, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+ import {ActivityIndicator, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
  
  import { getCollections } from './src/api/getCollections'
  import SwiperScreen from './src/components/SwiperScreen/index'
  import Header from './src/components/Header';
  import Description from './src/components/Description';
+ import LinearGradient from 'react-native-linear-gradient';
 
 const buttonText = 'Browse collection'
 
@@ -61,6 +62,7 @@ const buttonText = 'Browse collection'
     }
     setImages(imageArray);
     setPrice(priceArray);
+    //console.log(images, index);
    }
    
  useEffect(() => {
@@ -82,9 +84,10 @@ const buttonText = 'Browse collection'
   );
 }
 else {
-
+  // console.log(images)
    return (
     <SafeAreaView style={styles.container}>
+          <ScrollView>
         <StatusBar
         backgroundColor='#05071B'
         barStyle='light-content'
@@ -104,12 +107,23 @@ else {
         </View>
         <View style={{flex:1, backgroundColor: 'black'}}>
           <Description 
-            text={collections[0]?.description}
+            text={collections[index]?.description}
           />
           <TouchableOpacity style={styles.button} onPress={() => setIndex(index + 1)}>
             <Text style={styles.textButton}>{buttonText}</Text>
           </TouchableOpacity>
         </View>
+        
+          <LinearGradient
+          colors={['rgba(31, 236, 252, 1)', 'rgba(31, 236, 252, 0)']}
+          style={styles.linearGradient}
+          >
+            <Text style={styles.gradient}>
+              {'Scroll for next gem'}
+            </Text>
+          </LinearGradient>
+        
+        </ScrollView>
     </SafeAreaView>
    );
 }
@@ -120,6 +134,30 @@ else {
     flex:1,
     backgroundColor: '#05071B',
   },
+  linearGradient: {
+    flex: 1,
+    paddingLeft: 15,
+    paddingRight: 15,
+    borderRadius: 5,
+  },
+  gradient: {
+    height: 71,
+    textAlign: 'center',
+    paddingTop: 18,
+    //fontFamily: 'Poppins',
+    fontWeight: '500',
+    fontSize: 14,
+    lineHeight: 18.2,
+    color: '#FFFFFF'
+  },
+  buttonText: {
+    fontSize: 18,
+    fontFamily: 'Gill Sans',
+    textAlign: 'center',
+    margin: 10,
+    color: '#ffffff',
+    backgroundColor: 'transparent',
+  },
   button:{
     borderWidth: 1.5,
     borderColor: '#1FECFC',
@@ -128,7 +166,8 @@ else {
     borderRadius: 8,
     paddingTop: 12,
     paddingBottom: 11,
-    alignItems: 'center'
+    alignItems: 'center',
+    marginBottom: 72
   },
   textButton:{
     //fontFamily: 'Poppins',
