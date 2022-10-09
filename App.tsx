@@ -82,7 +82,7 @@ const buttonText = 'Browse collection'
   );
 }
 else {
-
+    console.log(currentIndex)
    return (
     <SafeAreaView style={styles.container}>
         <StatusBar
@@ -94,13 +94,15 @@ else {
           name={collections[index]?.creator_name}
           logo={collections[index]?.creator_pic}
           price={price}
-          index={currentIndex}
+          currentIndex={currentIndex}
           />
         <View style={{height: 390}}>
           <SwiperScreen 
             imageArray={images}
             onChange={setCurrentIndex}
-            collUrl={collections[index]?.collection_url}/>
+            collUrl={collections[index]?.collection_url}
+            collectionIndex={index}
+            />
         </View>
         <View style={{flex:1, backgroundColor: 'black'}}>
           <Description 

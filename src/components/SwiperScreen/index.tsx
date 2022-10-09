@@ -1,16 +1,9 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import Swiper from 'react-native-web-swiper';
+//import Swiper from 'react-native-web-swiper';
 import LastSlide from './LastSlide';
 import Slide from './Slide'
-
-const ActiveDot = () => {
-    return <View style={styles.activeDot}></View>
-}
-
-const InActiveDot = () => {
-    return <View style={styles.inActiveDot}></View>
-}
+import Swiper from 'react-native-swiper'
 
 interface urlArray {
   links: {
@@ -22,25 +15,21 @@ interface urlArray {
 interface imageArrType {
   imageArray:urlArray[],
   onChange(index:number):void,
-  collUrl:string
+  collUrl:string,
+  collectionIndex: number
  }
 
-const NFTSwiper = ({imageArray, onChange, collUrl}:imageArrType) => {
+const NFTSwiper = ({imageArray, onChange, collUrl, collectionIndex}:imageArrType) => {
 
 if (imageArray.length !== 0)
 {
     return (
         <Swiper
-            controlsProps={{
-                dotActiveStyle: { backgroundColor: '#FFFFFF' },
-                DotComponent: ({ index, isActive }) => {
-                    if (isActive) {
-                      onChange(index);
-                      return <ActiveDot />
-                    }
-                      return <InActiveDot />;
-                  }
-            }}
+            dot={<View style={styles.inActiveDot}></View>}
+            activeDot={<View style={styles.activeDot}></View>}
+            index={0}
+            onIndexChanged={(index) => onChange(index)}
+            loop={false}
         >
 
           <Slide image={imageArray[0].links} />

@@ -11,9 +11,9 @@ interface Props {
     name:string,
     logo:string,
     price:priceType[],
-    index:number
+    currentIndex:number
 }
-const Header = ({name, logo, price, index}:Props) => {
+const Header = ({name, logo, price, currentIndex}:Props) => {
     let eth = 0;
     let usd = 0;
     const totalCost = () => {
@@ -35,10 +35,10 @@ const Header = ({name, logo, price, index}:Props) => {
             <View style={{flexDirection: 'row'}}>
                 <Vector width={8} height={12}/>
                 <Text style={styles.collectionCostEth}>
-                    {index < price.length ? price[index].eth.toFixed(2): eth.toFixed(2)}
+                    {currentIndex < price.length ? price[currentIndex].eth.toFixed(2): eth.toFixed(2)}
                 </Text>
                 <Text style={styles.collectionCostUSD}>
-                    (${index < price.length ? price[index].usd.toFixed(2): usd.toFixed(2)})
+                    (${currentIndex < price.length ? price[currentIndex].usd.toFixed(2): usd.toFixed(2)})
                 </Text>
             </View>
         </View>
