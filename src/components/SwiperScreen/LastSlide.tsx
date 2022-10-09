@@ -1,27 +1,41 @@
 import React from "react"
-import {View, Image, StyleSheet, Text, TouchableOpacity} from 'react-native'
+import {View, Image, StyleSheet, Text, TouchableOpacity, Linking} from 'react-native'
 
-interface imageArrType {
-    imageArray:string[]
-  }
+interface urlArray {
+    links: {
+      url:string,
+      link:string
+    },
+   }
+  
+  interface imageArrType {
+    imageArray:urlArray[],
+    collUrl:string
+   }
 
-const LastSlide = ({imageArray}:imageArrType) => {
+const LastSlide = ({imageArray, collUrl}:imageArrType) => {
     if (imageArray.length !== 0) {
         return(
             <View >
                 <View style={{flexDirection: 'row'}}>
-                    <Image source={{uri: imageArray[0]}} style={styles.halfImage}/>
-                    <Image source={{uri: imageArray[1]}} style={styles.halfImage}/>
+                    <Image source={{uri: imageArray[0].links?.url}} style={styles.halfImage}/>
+                    <Image source={{uri: imageArray[1].links?.url}} style={styles.halfImage}/>
                 </View>
                 <View style={{flexDirection: 'row'}}>
-                    <Image source={{uri: imageArray[3]}} style={styles.halfImage}/>
-                    <Image source={{uri: imageArray[2]}} style={styles.halfImage}/>
+                    <Image source={{uri: imageArray[3].links?.url}} style={styles.halfImage}/>
+                    <Image source={{uri: imageArray[2].links?.url}} style={styles.halfImage}/>
                 </View>
                 <View style={styles.modal}>
                     <Text style={styles.modalText}
                     >{'Browse all NTFs\nfrom this collection'}</Text>
 
-                    <TouchableOpacity style={styles.button}>
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={() => Linking.openURL(collUrl)
+                            .catch(err =>
+                            console.error('An error occured', err))
+                            }
+                        >
                         <Text style={styles.buttonText}
                         >{'Browse collection'}
                         </Text>

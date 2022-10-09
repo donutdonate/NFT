@@ -33,12 +33,26 @@ const buttonText = 'Browse collection'
     eth:number,
     usd:number
    }
+
+   interface urlArray {
+    links: {
+      url:string,
+      link:string
+    },
+   }
+
    const sortCollection = () => {
-    let imageArray:string[] = [];
+    let imageArray:urlArray[] = [];
     let priceArray:priceType[] = [];
     for (let i = 0; i < collections[index]?.items.length; i++)
     {
-      imageArray = [...imageArray, collections[index]?.items[i].image];
+      const linksPair = {
+        links: {
+          url: collections[index]?.items[i].image,
+          link: collections[index]?.items[i].item_url
+        }
+      }
+      imageArray = [...imageArray, linksPair];
       const pricePair = {
         eth: collections[index]?.items[i].price_eth,
         usd: collections[index]?.items[i].price_usd
@@ -83,7 +97,10 @@ else {
           index={currentIndex}
           />
         <View style={{height: 390}}>
-          <SwiperScreen imageArray={images} onChange={setCurrentIndex}/>
+          <SwiperScreen 
+            imageArray={images}
+            onChange={setCurrentIndex}
+            collUrl={collections[index]?.collection_url}/>
         </View>
         <View style={{flex:1, backgroundColor: 'black'}}>
           <Description 

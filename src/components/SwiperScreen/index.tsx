@@ -12,12 +12,20 @@ const InActiveDot = () => {
     return <View style={styles.inActiveDot}></View>
 }
 
-interface imageArrType {
-  imageArray:string[],
-  onChange(index:number):void
-}
+interface urlArray {
+  links: {
+    url:string,
+    link:string
+  },
+ }
 
-const NFTSwiper = ({imageArray, onChange}:imageArrType) => {
+interface imageArrType {
+  imageArray:urlArray[],
+  onChange(index:number):void,
+  collUrl:string
+ }
+
+const NFTSwiper = ({imageArray, onChange, collUrl}:imageArrType) => {
 
 if (imageArray.length !== 0)
 {
@@ -35,11 +43,11 @@ if (imageArray.length !== 0)
             }}
         >
 
-          <Slide image={imageArray[0]} />
-          <Slide image={imageArray[1]} />
-          <Slide image={imageArray[2]} />
-          <Slide image={imageArray[3]} />
-          <LastSlide imageArray={imageArray}/>
+          <Slide image={imageArray[0].links} />
+          <Slide image={imageArray[1].links} />
+          <Slide image={imageArray[2].links} />
+          <Slide image={imageArray[3].links} />
+          <LastSlide imageArray={imageArray} collUrl={collUrl}/>
 
         </Swiper>
     );
