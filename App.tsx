@@ -12,6 +12,7 @@
  import {
   ActivityIndicator,
   Animated,
+  Linking,
   SafeAreaView,
   StatusBar,
   StyleSheet,
@@ -26,7 +27,19 @@
  import Description from './src/components/Description';
  import LinearGradient from 'react-native-linear-gradient';
 
-const buttonText = 'Browse collection'
+ interface priceType {
+  eth:number,
+  usd:number
+ }
+
+ interface urlArray {
+  links: {
+    url:string,
+    link:string
+  },
+ }
+
+const buttonText = 'Browse collection';
 
  const App = () => {
    const [collections, setCollections] = useState([]);
@@ -45,24 +58,12 @@ const buttonText = 'Browse collection'
     outputRange:[72, 33],
   })
   
-
   const swiperRef = React.useRef(null);
   const scrollRef = React.useRef(null);
 
    const loadCollections = async () => {
      const temp = await getCollections();
      setCollections(temp);
-   }
-   interface priceType {
-    eth:number,
-    usd:number
-   }
-
-   interface urlArray {
-    links: {
-      url:string,
-      link:string
-    },
    }
 
    const sortCollection = () => {
@@ -85,7 +86,10 @@ const buttonText = 'Browse collection'
     }
     setImages(imageArray);
     setPrice(priceArray);
+   }
 
+   const toCollectionURL = () => {
+    Linking.openURL(collections[index]?.collection_url);
    }
    
    const nextCollection = () => {
@@ -95,8 +99,6 @@ const buttonText = 'Browse collection'
       y: 0,
       animated: true,
     });
-    // console.log(scrollRef?.current);
-    // console.log(scrollRef?.current);
    }
 
  useEffect(() => {
@@ -157,7 +159,7 @@ else {
           <Description 
             text={collections[index]?.description}
           />
-          <TouchableOpacity style={styles.button} onPress={nextCollection}>
+          <TouchableOpacity style={styles.button} onPress={toCollectionURL}>
             <Text style={styles.textButton}>{buttonText}</Text>
           </TouchableOpacity>
         </View>
@@ -189,7 +191,6 @@ else {
     height: '40%',
   },
   gradient: {
-    // height: '40%',
     textAlign: 'center',
     paddingTop: 18,
     paddingBottom: 35,
