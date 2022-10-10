@@ -42,16 +42,12 @@ const buttonText = 'Browse collection'
   })
   const marginTop = scrolling.interpolate({
     inputRange: [13, 100],
-    outputRange:[72, 24],
+    outputRange:[72, 33],
   })
-
-  React.useEffect(() =>{
-
-    scrolling.addListener(dic=>
-      console.log(dic.value))
   
-    return ()=> scrolling.removeAllListeners()
-  },[])
+
+  const swiperRef = React.useRef(null);
+  const scrollRef = React.useRef(null);
 
    const loadCollections = async () => {
      const temp = await getCollections();
@@ -89,19 +85,27 @@ const buttonText = 'Browse collection'
     }
     setImages(imageArray);
     setPrice(priceArray);
-    //console.log(images, index);
+
    }
    
+   const nextCollection = () => {
+    setIndex(index + 1);
+    swiperRef?.current?.scrollBy(-currentIndex, false);
+    scrollRef.current?.scrollTo({
+      y: 0,
+      animated: true,
+    });
+    // console.log(scrollRef?.current);
+    // console.log(scrollRef?.current);
+   }
+
  useEffect(() => {
   loadCollections();
  }, []);
  useEffect(() => {
   sortCollection();
  }, [collections, index]);
-//  console.log(collections)
 
-//  if (collections.length !== 0 && images.length === 0)
-//   sortCollection();
  if (!collections || collections.length === 0)
 {
   return (
@@ -111,14 +115,12 @@ const buttonText = 'Browse collection'
   );
 }
 else {
-<<<<<<< HEAD
-    console.log(currentIndex)
-=======
-  // console.log(images)
->>>>>>> addGtadientScroll
    return (
     <SafeAreaView style={styles.container}>
           <Animated.ScrollView
+            onScrollEndDrag={nextCollection}
+            ref={scrollRef}
+            bounces={true}
             scrollEventThrottle={16}
             onScroll={Animated.event(
               [{
@@ -148,14 +150,14 @@ else {
             imageArray={images}
             onChange={setCurrentIndex}
             collUrl={collections[index]?.collection_url}
-            collectionIndex={index}
+            swiperRef={swiperRef}
             />
         </View>
         <View style={{flex:1, backgroundColor: 'black'}}>
           <Description 
             text={collections[index]?.description}
           />
-          <TouchableOpacity style={styles.button} onPress={() => setIndex(index + 1)}>
+          <TouchableOpacity style={styles.button} onPress={nextCollection}>
             <Text style={styles.textButton}>{buttonText}</Text>
           </TouchableOpacity>
         </View>

@@ -16,15 +16,16 @@ interface imageArrType {
   imageArray:urlArray[],
   onChange(index:number):void,
   collUrl:string,
-  collectionIndex: number
+  swiperRef: React.MutableRefObject<null>
  }
 
-const NFTSwiper = ({imageArray, onChange, collUrl, collectionIndex}:imageArrType) => {
-
+const NFTSwiper = ({imageArray, onChange, collUrl, swiperRef}:imageArrType) => {
+  
 if (imageArray.length !== 0)
 {
     return (
         <Swiper
+            ref={swiperRef}
             dot={<View style={styles.inActiveDot}></View>}
             activeDot={<View style={styles.activeDot}></View>}
             index={0}
