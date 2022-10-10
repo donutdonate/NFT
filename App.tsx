@@ -9,7 +9,16 @@
  */
 
  import React, { useEffect, useState} from 'react';
- import {ActivityIndicator, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+ import {
+  ActivityIndicator,
+  Animated,
+  SafeAreaView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from 'react-native';
  
  import { getCollections } from './src/api/getCollections'
  import SwiperScreen from './src/components/SwiperScreen/index'
@@ -25,6 +34,24 @@ const buttonText = 'Browse collection'
    const [images, setImages] = useState([]);
    const [price, setPrice] = useState([]);
    const [currentIndex, setCurrentIndex] = useState(0);
+
+  const scrolling = React.useRef(new Animated.Value(0)).current;
+  const height =  scrolling.interpolate({
+    inputRange: [13, 50],
+    outputRange:['40%', '100%'],
+  })
+  const marginTop = scrolling.interpolate({
+    inputRange: [13, 100],
+    outputRange:[72, 24],
+  })
+
+  React.useEffect(() =>{
+
+    scrolling.addListener(dic=>
+      console.log(dic.value))
+  
+    return ()=> scrolling.removeAllListeners()
+  },[])
 
    const loadCollections = async () => {
      const temp = await getCollections();
@@ -87,7 +114,20 @@ else {
   // console.log(images)
    return (
     <SafeAreaView style={styles.container}>
-          <ScrollView>
+          <Animated.ScrollView
+            scrollEventThrottle={16}
+            onScroll={Animated.event(
+              [{
+                nativeEvent: {
+                  contentOffset: {
+                    // 
+                    y: scrolling,
+                  },
+                },
+              }],
+              { useNativeDriver: false },
+            )}
+          >
         <StatusBar
         backgroundColor='#05071B'
         barStyle='light-content'
@@ -113,7 +153,8 @@ else {
             <Text style={styles.textButton}>{buttonText}</Text>
           </TouchableOpacity>
         </View>
-        
+        <View style={{height: 178}}>
+          <Animated.View style={{height, marginTop}}>
           <LinearGradient
           colors={['rgba(31, 236, 252, 1)', 'rgba(31, 236, 252, 0)']}
           style={styles.linearGradient}
@@ -122,8 +163,9 @@ else {
               {'Scroll for next gem'}
             </Text>
           </LinearGradient>
-        
-        </ScrollView>
+          </Animated.View>
+          </View>
+        </Animated.ScrollView>
     </SafeAreaView>
    );
 }
@@ -135,20 +177,19 @@ else {
     backgroundColor: '#05071B',
   },
   linearGradient: {
-    flex: 1,
-    paddingLeft: 15,
-    paddingRight: 15,
-    borderRadius: 5,
+    
+    height: '40%',
   },
   gradient: {
-    height: 71,
+    // height: '40%',
     textAlign: 'center',
     paddingTop: 18,
+    paddingBottom: 35,
     //fontFamily: 'Poppins',
     fontWeight: '500',
     fontSize: 14,
     lineHeight: 18.2,
-    color: '#FFFFFF'
+    color: '#FFFFFF',
   },
   buttonText: {
     fontSize: 18,
@@ -167,14 +208,13 @@ else {
     paddingTop: 12,
     paddingBottom: 11,
     alignItems: 'center',
-    marginBottom: 72
   },
   textButton:{
     //fontFamily: 'Poppins',
     fontWeight: '600',
     fontSize: 14,
     lineHeight: 16.8,
-    color: '#FFFFFF'
+    color: '#FFFFFF',
   },
    sectionContainer: {
      marginTop: 32,
