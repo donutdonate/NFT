@@ -10,14 +10,10 @@
 
  import React, { useEffect, useState} from 'react';
  import {
-  ActivityIndicator,
   Animated,
-  Linking,
   SafeAreaView,
   StatusBar,
   StyleSheet,
-  Text,
-  TouchableOpacity,
   View
 } from 'react-native';
  
@@ -25,27 +21,17 @@
  import SwiperScreen from './src/components/SwiperScreen/index'
  import Header from './src/components/Header';
  import Description from './src/components/Description';
- import LinearGradient from 'react-native-linear-gradient';
-
- interface priceType {
-  eth:number,
-  usd:number
- }
-
- interface urlArray {
-  links: {
-    url:string,
-    link:string
-  },
- }
-
-const buttonText = 'Browse collection';
+ import {PriceType, ImageType} from './src/utils/interfaces' ;
+ import OnLoadScreen from './src/components/OnLoadScreen';
+import CustomButton from './src/components/CustomButton';
+import LinearGradientSwipe from './src/components/LinearGradientSwipe';
+import { colors } from './src/utils/colors';
 
  const App = () => {
    const [collections, setCollections] = useState([]);
    const [index, setIndex] = useState(0);
-   const [images, setImages] = useState([]);
-   const [price, setPrice] = useState([]);
+   const [images, setImages] = useState<ImageType[]>([]);
+   const [price, setPrice] = useState<PriceType[]>([]);
    const [currentIndex, setCurrentIndex] = useState(0);
 
   const scrolling = React.useRef(new Animated.Value(0)).current;
@@ -67,8 +53,8 @@ const buttonText = 'Browse collection';
    }
 
    const sortCollection = () => {
-    let imageArray:urlArray[] = [];
-    let priceArray:priceType[] = [];
+    let imageArray:ImageType[] = [];
+    let priceArray:PriceType[] = [];
     for (let i = 0; i < collections[index]?.items.length; i++)
     {
       const linksPair = {
@@ -86,10 +72,6 @@ const buttonText = 'Browse collection';
     }
     setImages(imageArray);
     setPrice(priceArray);
-   }
-
-   const toCollectionURL = () => {
-    Linking.openURL(collections[index]?.collection_url);
    }
    
    const nextCollection = () => {
@@ -111,9 +93,7 @@ const buttonText = 'Browse collection';
  if (!collections || collections.length === 0)
 {
   return (
-    <SafeAreaView style={[styles.container, {alignItems:'center', justifyContent: 'center'}]}>
-      <ActivityIndicator size="large" color="#1FECFC" />
-    </SafeAreaView>
+    <OnLoadScreen />
   );
 }
 else {
@@ -155,24 +135,20 @@ else {
             swiperRef={swiperRef}
             />
         </View>
-        <View style={{flex:1, backgroundColor: 'black'}}>
+
           <Description 
             text={collections[index]?.description}
           />
-          <TouchableOpacity style={styles.button} onPress={toCollectionURL}>
-            <Text style={styles.textButton}>{buttonText}</Text>
-          </TouchableOpacity>
-        </View>
+
+            <CustomButton
+              collUrl={collections[index]?.collection_url}
+              buttonText={'Browse collection'}
+            />
+
+          
         <View style={{height: 178}}>
           <Animated.View style={{height, marginTop}}>
-          <LinearGradient
-          colors={['rgba(31, 236, 252, 1)', 'rgba(31, 236, 252, 0)']}
-          style={styles.linearGradient}
-          >
-            <Text style={styles.gradient}>
-              {'Scroll for next gem'}
-            </Text>
-          </LinearGradient>
+              <LinearGradientSwipe/>
           </Animated.View>
           </View>
         </Animated.ScrollView>
@@ -184,46 +160,7 @@ else {
  const styles = StyleSheet.create({
   container: {
     flex:1,
-    backgroundColor: '#05071B',
-  },
-  linearGradient: {
-    
-    height: '40%',
-  },
-  gradient: {
-    textAlign: 'center',
-    paddingTop: 18,
-    paddingBottom: 35,
-    //fontFamily: 'Poppins',
-    fontWeight: '500',
-    fontSize: 14,
-    lineHeight: 18.2,
-    color: '#FFFFFF',
-  },
-  buttonText: {
-    fontSize: 18,
-    fontFamily: 'Gill Sans',
-    textAlign: 'center',
-    margin: 10,
-    color: '#ffffff',
-    backgroundColor: 'transparent',
-  },
-  button:{
-    borderWidth: 1.5,
-    borderColor: '#1FECFC',
-    marginLeft: 12,
-    marginRight: 12,
-    borderRadius: 8,
-    paddingTop: 12,
-    paddingBottom: 11,
-    alignItems: 'center',
-  },
-  textButton:{
-    //fontFamily: 'Poppins',
-    fontWeight: '600',
-    fontSize: 14,
-    lineHeight: 16.8,
-    color: '#FFFFFF',
+    backgroundColor: colors.MAINSCREEN_BACKGROUND,
   },
    sectionContainer: {
      marginTop: 32,

@@ -1,46 +1,33 @@
 import React from "react"
 import { Image, StyleSheet, Text, View } from "react-native"
-import Vector from '../../svg/Vector.svg'
+import { HeaderInfo } from "../../utils/interfaces"
+import Price from "./components/Price";
+import { colors } from "../../utils/colors";
 
-interface priceType {
-    eth:number,
-    usd:number
-   }
-
-interface Props {
-    name:string,
-    logo:string,
-    price:priceType[],
-    currentIndex:number
-}
-const Header = ({name, logo, price, currentIndex}:Props) => {
-    let eth = 0;
-    let usd = 0;
+const Header = ({name, logo, price, currentIndex}:HeaderInfo) => {
+    let totalEth = 0;
+    let totalUsd = 0;
     const totalCost = () => {
         for (let i = 0; i < price.length; i++)
         {
-            eth+=price[i].eth;
-            usd+=price[i].usd;
+            totalEth+=price[i].eth;
+            totalUsd+=price[i].usd;
         }
     }
     totalCost();
     
     return(
       <View style={styles.container}>
-        
             <Image source={{uri: logo}} style={styles.logo} />
-        
         <View style={styles.collectionInfo}>
             <Text style={styles.collectionName}>{name}</Text>
-            <View style={{flexDirection: 'row'}}>
-                <Vector width={8} height={12}/>
-                <Text style={styles.collectionCostEth}>
-                    {currentIndex < price.length ? price[currentIndex].eth.toFixed(2): eth.toFixed(2)}
-                </Text>
-                <Text style={styles.collectionCostUSD}>
-                    (${currentIndex < price.length ? price[currentIndex].usd.toFixed(2): usd.toFixed(2)})
-                </Text>
-            </View>
+            <Price 
+                currentIndex={currentIndex}
+                totalEth={totalEth}
+                totalUsd={totalUsd}
+                length={price.length}
+                price={price}
+            />
         </View>
       </View>
     )
@@ -49,7 +36,7 @@ const Header = ({name, logo, price, currentIndex}:Props) => {
 const styles = StyleSheet.create({
     container: {
         height: 56,
-        backgroundColor: '#1E2032',
+        backgroundColor: colors.HEADER_BACKGROUND,
         flexDirection: 'row',
         paddingLeft: 12,
         paddingTop: 8,
@@ -65,27 +52,11 @@ const styles = StyleSheet.create({
         flexDirection: 'column'
     },
     collectionName: {
-        color: '#1FECFC',
+        color: colors.HEADER_NAME,
         //fontFamily: 'Poppins'
         fontWeight: '600',
         fontSize: 16,
         lineHeight: 24
-    },
-    collectionCostEth: {
-        color: '#FFFFFF',
-        //fontFamily: 'Poppins'
-        fontWeight: '600',
-        fontSize: 14,
-        lineHeight: 15.4,
-        marginLeft: 4
-    },
-    collectionCostUSD: {
-        fontWeight: '500',
-        fontSize: 10,
-        lineHeight: 15,
-        color: '#CDCDD1',
-        marginLeft: 4,
-        //fontFamily: 'Poppins'
     }
 })
 export default Header;

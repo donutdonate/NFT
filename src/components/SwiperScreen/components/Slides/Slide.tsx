@@ -1,24 +1,21 @@
-import React from "react"
-import { Image, StyleSheet, TouchableOpacity, Linking } from 'react-native'
+import React from "react";
+import { ImageType } from "../../../../utils/interfaces";
+import { Image, StyleSheet, TouchableOpacity, Linking } from 'react-native';
 
-interface imageType {
-       image: {
-        url:string,
-        link:string
-    }
-}
-
-const Slide = ({image}:imageType) => {
+const Slide = ({links}:ImageType) => {
 
     return(
         <TouchableOpacity 
             style={styles.slideContainer}
-            onPress={() => Linking.openURL(image.link)
+            onPress={() => Linking.openURL(links?.link)
             .catch(err =>
             console.error('An error occured', err))
             }
         >
-            <Image source={{uri: image.url}} style={styles.image}/>
+            <Image
+            source={{uri: links?.url}}
+            style={styles.image}
+            />
         </TouchableOpacity>
 )
 }

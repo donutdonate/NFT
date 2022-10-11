@@ -1,11 +1,9 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { DescriveType } from "../../utils/interfaces";
+import {colors} from '../../utils/colors';
 
-interface Props {
-    text:string
-}
-
-const Description = ({text}:Props) => {
+const Description = ({text}:DescriveType) => {
     return (
     <View style={styles.describeBlock}>
         <Text style={styles.describtion}>
@@ -20,16 +18,15 @@ const styles = StyleSheet.create({
         paddingLeft: 12,
         paddingRight: 12,
         paddingTop: 8,
-        backgroundColor: '#05071B',
+        backgroundColor: colors.DESCRIPTION_BACKGROUND,
         paddingBottom: 25
     },
     describtion: {
-        color: '#F3F3F4',
+        color: colors.DESCRIBTION_FONT,
         fontWeight: '400',
         fontSize: 14,
         lineHeight: 18.2,
         //fontFamily: 'Poppins'
-
     }
 }
 )
