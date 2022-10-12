@@ -81,7 +81,7 @@ import { addPreice } from './src/store/slice';
       //priceArray = [...priceArray, pricePair]
     }
     setImages(imageArray);
-    setPrice(priceArray);
+    //setPrice(priceArray);
    }
    
    const nextCollection = () => {
@@ -104,9 +104,7 @@ import { addPreice } from './src/store/slice';
  if (!collections || collections.length === 0)
 {
   return (
-    <Provider store={store}>
     <OnLoadScreen />
-    </Provider>
   );
 }
 else {
