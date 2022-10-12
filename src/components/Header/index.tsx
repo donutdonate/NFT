@@ -15,7 +15,6 @@ const Header = ({name, logo, price, currentIndex}:HeaderInfo) => {
         }
     }
     totalCost();
-    
     return(
       <View style={styles.container}>
             <Image source={{uri: logo}} style={styles.logo} />

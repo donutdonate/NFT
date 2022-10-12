@@ -26,13 +26,22 @@
 import CustomButton from './src/components/CustomButton';
 import LinearGradientSwipe from './src/components/LinearGradientSwipe';
 import { colors } from './src/utils/colors';
+import { Provider, useDispatch } from 'react-redux';
+import store from './src/store';
+import { useSelector } from 'react-redux';
+import { addPreice } from './src/store/slice';
 
+// const store = configureStore([]);
  const App = () => {
    const [collections, setCollections] = useState([]);
    const [index, setIndex] = useState(0);
    const [images, setImages] = useState<ImageType[]>([]);
    const [price, setPrice] = useState<PriceType[]>([]);
    const [currentIndex, setCurrentIndex] = useState(0);
+
+  const prices = useSelector(state => state.prices.prices);
+  const dispatch = useDispatch();
+  
 
   const scrolling = React.useRef(new Animated.Value(0)).current;
   const height =  scrolling.interpolate({
@@ -68,7 +77,8 @@ import { colors } from './src/utils/colors';
         eth: collections[index]?.items[i].price_eth,
         usd: collections[index]?.items[i].price_usd
       }
-      priceArray = [...priceArray, pricePair]
+      dispatch(addPreice(pricePair));
+      //priceArray = [...priceArray, pricePair]
     }
     setImages(imageArray);
     setPrice(priceArray);
@@ -85,6 +95,7 @@ import { colors } from './src/utils/colors';
 
  useEffect(() => {
   loadCollections();
+  console.log('Это мой слайс', prices);
  }, []);
  useEffect(() => {
   sortCollection();
@@ -93,7 +104,9 @@ import { colors } from './src/utils/colors';
  if (!collections || collections.length === 0)
 {
   return (
+    <Provider store={store}>
     <OnLoadScreen />
+    </Provider>
   );
 }
 else {
@@ -117,14 +130,14 @@ else {
             )}
           >
         <StatusBar
-        backgroundColor='#05071B'
+        backgroundColor={colors.STATUSBAR_BACKGROUND}
         barStyle='light-content'
         showHideTransition='slide'
         hidden={false} />
         <Header
           name={collections[index]?.creator_name}
           logo={collections[index]?.creator_pic}
-          price={price}
+          price={prices}
           currentIndex={currentIndex}
           />
         <View style={{height: 390}}>
@@ -155,8 +168,8 @@ else {
     </SafeAreaView>
    );
 }
- };
- 
+};
+
  const styles = StyleSheet.create({
   container: {
     flex:1,
