@@ -62,3 +62,18 @@ export interface PriceProps {
     length: number,
     price: PriceType[]
 }
+
+export interface CollectionsType {
+    creator_name: string,
+    creator_pic: string,
+    collection_url: string,
+    description: string,
+    items:Items[]
+  }
+  export interface Items {
+    name:string,
+    price_eth: string,
+    price_usd: string,
+    image: string,
+    item_url: string
+  }

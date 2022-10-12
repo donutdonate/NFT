@@ -21,22 +21,23 @@
  import SwiperScreen from './src/components/SwiperScreen/index'
  import Header from './src/components/Header';
  import Description from './src/components/Description';
- import {PriceType, ImageType} from './src/utils/interfaces' ;
+ import {CollectionsType, ImageType} from './src/utils/interfaces' ;
  import OnLoadScreen from './src/components/OnLoadScreen';
 import CustomButton from './src/components/CustomButton';
 import LinearGradientSwipe from './src/components/LinearGradientSwipe';
 import { colors } from './src/utils/colors';
-import { Provider, useDispatch } from 'react-redux';
-import store from './src/store';
+import { useDispatch } from 'react-redux';
+
 import { useSelector } from 'react-redux';
 import { addPreice } from './src/store/slice';
 
-// const store = configureStore([]);
+
+
  const App = () => {
-   const [collections, setCollections] = useState([]);
+   const [collections, setCollections] = useState<CollectionsType[]>([]);
    const [index, setIndex] = useState(0);
    const [images, setImages] = useState<ImageType[]>([]);
-   const [price, setPrice] = useState<PriceType[]>([]);
+   //const [price, setPrice] = useState<PriceType[]>([]);
    const [currentIndex, setCurrentIndex] = useState(0);
 
   const prices = useSelector(state => state.prices.prices);
@@ -63,7 +64,7 @@ import { addPreice } from './src/store/slice';
 
    const sortCollection = () => {
     let imageArray:ImageType[] = [];
-    let priceArray:PriceType[] = [];
+    //let priceArray:PriceType[] = [];
     for (let i = 0; i < collections[index]?.items.length; i++)
     {
       const linksPair = {
@@ -119,7 +120,6 @@ else {
               [{
                 nativeEvent: {
                   contentOffset: {
-                    // 
                     y: scrolling,
                   },
                 },
@@ -171,24 +171,9 @@ else {
  const styles = StyleSheet.create({
   container: {
     flex:1,
-    backgroundColor: colors.MAINSCREEN_BACKGROUND,
-  },
-   sectionContainer: {
-     marginTop: 32,
-     paddingHorizontal: 24,
-   },
-   sectionTitle: {
-     fontSize: 24,
-     fontWeight: '600',
-   },
-   sectionDescription: {
-     marginTop: 8,
-     fontSize: 18,
-     fontWeight: '400',
-   },
-   highlight: {
-     fontWeight: '700',
-   },
+    backgroundColor:
+    colors.MAINSCREEN_BACKGROUND,
+  }
  });
  
  export default App;
