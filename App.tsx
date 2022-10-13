@@ -16,12 +16,10 @@
   StyleSheet,
   View
 } from 'react-native';
- 
- import { getCollections } from './src/api/getCollections'
  import SwiperScreen from './src/components/SwiperScreen/index'
  import Header from './src/components/Header';
  import Description from './src/components/Description';
- import {CollectionsType, ImageType, PriceType} from './src/utils/interfaces' ;
+ import {ImageType, PriceType} from './src/utils/interfaces' ;
  import OnLoadScreen from './src/components/OnLoadScreen';
 import CustomButton from './src/components/CustomButton';
 import LinearGradientSwipe from './src/components/LinearGradientSwipe';
@@ -34,17 +32,18 @@ import { fetchCollections } from './src/store/slice';
 
 
  const App = () => {
-   const [collections, setCollections] = useState<CollectionsType[]>([]);
    const [index, setIndex] = useState(0);
    const [images, setImages] = useState<ImageType[]>([]);
    const [price, setPrice] = useState<PriceType[]>([]);
    const [currentIndex, setCurrentIndex] = useState(0);
 
-  //const prices = useSelector(state => state.prices.prices);
-  //const dispatch = useDispatch();
   const collectionssss = useSelector(state => state.collections.collections);
   const dispatch = useDispatch();
+
   const scrolling = React.useRef(new Animated.Value(0)).current;
+  const swiperRef = React.useRef(null);
+  const scrollRef = React.useRef(null);
+
   const height =  scrolling.interpolate({
     inputRange: [13, 50],
     outputRange:['40%', '100%'],
@@ -54,29 +53,21 @@ import { fetchCollections } from './src/store/slice';
     outputRange:[72, 33],
   })
   
-  const swiperRef = React.useRef(null);
-  const scrollRef = React.useRef(null);
-
-   const loadCollections = async () => {
-     const temp = await getCollections();
-     setCollections(temp);
-   }
-
    const sortCollection = () => {
     let imageArray:ImageType[] = [];
     let priceArray:PriceType[] = [];
-    for (let i = 0; i < collections[index]?.items.length; i++)
+    for (let i = 0; i < collectionssss[index]?.items.length; i++)
     {
       const linksPair = {
         links: {
-          url: collections[index]?.items[i].image,
-          link: collections[index]?.items[i].item_url
+          url: collectionssss[index]?.items[i].image,
+          link: collectionssss[index]?.items[i].item_url
         }
       }
       imageArray = [...imageArray, linksPair];
       const pricePair = {
-        eth: collections[index]?.items[i].price_eth,
-        usd: collections[index]?.items[i].price_usd
+        eth: collectionssss[index]?.items[i].price_eth,
+        usd: collectionssss[index]?.items[i].price_usd
       }
 
       priceArray = [...priceArray, pricePair]
@@ -95,18 +86,16 @@ import { fetchCollections } from './src/store/slice';
    }
 
  useEffect(() => {
-  loadCollections();
   dispatch(fetchCollections())
-  //console.log('Это мой слайс', prices);
  }, [dispatch]);
 
  console.log(collectionssss);
 
  useEffect(() => {
   sortCollection();
- }, [collections, index]);
+ }, [collectionssss, index]);
 
- if (!collections || collections.length === 0)
+ if (!collectionssss || collectionssss.length === 0)
 {
   return (
     <OnLoadScreen />
@@ -137,8 +126,8 @@ else {
         showHideTransition='slide'
         hidden={false} />
         <Header
-          name={collections[index]?.creator_name}
-          logo={collections[index]?.creator_pic}
+          name={collectionssss[index]?.creator_name}
+          logo={collectionssss[index]?.creator_pic}
           price={price}
           currentIndex={currentIndex}
           />
@@ -146,17 +135,17 @@ else {
           <SwiperScreen 
             imageArray={images}
             onChange={setCurrentIndex}
-            collUrl={collections[index]?.collection_url}
+            collUrl={collectionssss[index]?.collection_url}
             swiperRef={swiperRef}
             />
         </View>
 
           <Description 
-            text={collections[index]?.description}
+            text={collectionssss[index]?.description}
           />
 
             <CustomButton
-              collUrl={collections[index]?.collection_url}
+              collUrl={collectionssss[index]?.collection_url}
               buttonText={'Browse collection'}
             />
 
@@ -165,7 +154,7 @@ else {
           <Animated.View style={{height, marginTop}}>
               <LinearGradientSwipe/>
           </Animated.View>
-          </View>
+        </View>
         </Animated.ScrollView>
     </SafeAreaView>
    );

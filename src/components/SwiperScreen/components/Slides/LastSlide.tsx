@@ -19,7 +19,7 @@ const LastSlide = ({
                     url_1={imageArray[3].links.url}
                     url_2={imageArray[2].links.url}
                 />
-                <ModalView collUrl={collUrl}/>
+                <ModalView collUrl={collUrl} buttonText={''}/>
             </View>
         )
     }

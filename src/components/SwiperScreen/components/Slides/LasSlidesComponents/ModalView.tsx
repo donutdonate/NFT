@@ -4,7 +4,7 @@ import { CollectionUrl } from "../../../../../utils/interfaces";
 import { colors } from "../../../../../utils/colors";
 import CustomButton from  '../../../../CustomButton'
 
-const ModalView = ({collUrl}:CollectionUrl) => {
+const ModalView = ({collUrl, buttonText=''}:CollectionUrl) => {
     return(
     <View style={styles.modal}>
         <Text style={styles.modalText}
