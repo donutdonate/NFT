@@ -1,8 +1,16 @@
-import { configureStore } from "@reduxjs/toolkit";
-import pricesReducer from './slice';
+import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
+import createSagaMiddleware from 'redux-saga'
+import collectionReducer from './slice'
+import collectionsSaga from "../saga";
+const saga = createSagaMiddleware();
 
-export default configureStore({
+const store = configureStore({
     reducer: {
-        prices: pricesReducer,
-    }
+        collections: collectionReducer,
+    },
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware()?.concat(saga)
 })
+
+saga.run(collectionsSaga);
+
+export default store;

@@ -21,7 +21,7 @@
  import SwiperScreen from './src/components/SwiperScreen/index'
  import Header from './src/components/Header';
  import Description from './src/components/Description';
- import {CollectionsType, ImageType} from './src/utils/interfaces' ;
+ import {CollectionsType, ImageType, PriceType} from './src/utils/interfaces' ;
  import OnLoadScreen from './src/components/OnLoadScreen';
 import CustomButton from './src/components/CustomButton';
 import LinearGradientSwipe from './src/components/LinearGradientSwipe';
@@ -29,7 +29,7 @@ import { colors } from './src/utils/colors';
 import { useDispatch } from 'react-redux';
 
 import { useSelector } from 'react-redux';
-import { addPreice } from './src/store/slice';
+import { fetchCollections } from './src/store/slice';
 
 
 
@@ -37,13 +37,13 @@ import { addPreice } from './src/store/slice';
    const [collections, setCollections] = useState<CollectionsType[]>([]);
    const [index, setIndex] = useState(0);
    const [images, setImages] = useState<ImageType[]>([]);
-   //const [price, setPrice] = useState<PriceType[]>([]);
+   const [price, setPrice] = useState<PriceType[]>([]);
    const [currentIndex, setCurrentIndex] = useState(0);
 
-  const prices = useSelector(state => state.prices.prices);
+  //const prices = useSelector(state => state.prices.prices);
+  //const dispatch = useDispatch();
+  const collectionssss = useSelector(state => state.collections.collections);
   const dispatch = useDispatch();
-  
-
   const scrolling = React.useRef(new Animated.Value(0)).current;
   const height =  scrolling.interpolate({
     inputRange: [13, 50],
@@ -64,7 +64,7 @@ import { addPreice } from './src/store/slice';
 
    const sortCollection = () => {
     let imageArray:ImageType[] = [];
-    //let priceArray:PriceType[] = [];
+    let priceArray:PriceType[] = [];
     for (let i = 0; i < collections[index]?.items.length; i++)
     {
       const linksPair = {
@@ -78,11 +78,11 @@ import { addPreice } from './src/store/slice';
         eth: collections[index]?.items[i].price_eth,
         usd: collections[index]?.items[i].price_usd
       }
-      dispatch(addPreice(pricePair));
-      //priceArray = [...priceArray, pricePair]
+
+      priceArray = [...priceArray, pricePair]
     }
     setImages(imageArray);
-    //setPrice(priceArray);
+    setPrice(priceArray);
    }
    
    const nextCollection = () => {
@@ -96,8 +96,12 @@ import { addPreice } from './src/store/slice';
 
  useEffect(() => {
   loadCollections();
-  console.log('Это мой слайс', prices);
- }, []);
+  dispatch(fetchCollections())
+  //console.log('Это мой слайс', prices);
+ }, [dispatch]);
+
+ console.log(collectionssss);
+
  useEffect(() => {
   sortCollection();
  }, [collections, index]);
@@ -135,7 +139,7 @@ else {
         <Header
           name={collections[index]?.creator_name}
           logo={collections[index]?.creator_pic}
-          price={prices}
+          price={price}
           currentIndex={currentIndex}
           />
         <View style={{height: 390}}>
